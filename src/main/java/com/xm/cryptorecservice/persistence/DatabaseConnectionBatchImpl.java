@@ -22,8 +22,8 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
 
     @Override
     public void createTable(@NonNull String tableName) {
-        String query = String.format("CREATE TABLE %s (id BIGINT NOT NULL AUTO_INCREMENT timestamp TIMESTAMP NOT" +
-                " NULL price DECIMAL(10, 10)) NOT NULL", tableName.toUpperCase(Locale.ROOT));
+        String query = String.format("CREATE TABLE %s (id BIGINT NOT NULL AUTO_INCREMENT, timestamp TIMESTAMP NOT" +
+                " NULL, price DECIMAL(20, 10) NOT NULL, PRIMARY KEY (id))", tableName.toUpperCase(Locale.ROOT));
         jdbcTemplate.execute(query);
     }
 
@@ -35,7 +35,7 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
                 cryptoPrices, BATCH_SIZE,
                 (PreparedStatement ps, CryptoPrice price) -> {
                     ps.setTimestamp(1, price.getTimestamp());
-                    ps.setBigDecimal(2, price.getPrice());
+                    ps.setBigDecimal(2, price.getPrice()); // TODO: parameter indices?
                 });
     }
 

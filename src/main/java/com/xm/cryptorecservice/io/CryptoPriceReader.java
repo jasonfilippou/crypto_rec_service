@@ -27,14 +27,13 @@ public class CryptoPriceReader {
     private final DatabaseConnection db;
 
     public void persistAllCSVsInDirectory(String directory){
-        File[] csvs = (File[]) Arrays.stream(Objects.requireNonNull(new File(directory).listFiles()))
-                .filter(file->file.getName().endsWith(".csv")).toArray();
-        int numOfCSVs = csvs.length;
-        if(numOfCSVs == 0){
-            return;
-        }
-        for(File csv: csvs){
-            String cryptoName = csv.getName().substring(0, csv.getName().length() - 3); // Assuming format "name.csv"
+        //File[] csvs = (File[]) Arrays.stream(Objects.requireNonNull(new File(directory).listFiles()))
+        //      .filter(file->file.getName().endsWith(".csv")).toArray();
+        List<File> csvs = Arrays.stream(Objects.requireNonNull(new File(directory).listFiles()))
+                .filter(file -> !file.isDirectory() &&
+                file.getName().endsWith(".csv")).toList();
+        for (File csv : csvs) {
+            String cryptoName = csv.getName().substring(0, csv.getName().length() - 4); // Assuming format "name.csv"
             log.info("Creating table corresponding to crypto: " + cryptoName);
             db.createTable(cryptoName);
             log.info("Table corresponding to crypto: " + cryptoName + " created.");

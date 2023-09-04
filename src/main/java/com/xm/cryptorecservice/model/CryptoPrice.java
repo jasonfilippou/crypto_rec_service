@@ -13,7 +13,7 @@ public class CryptoPrice {
 
     public static CryptoPrice fromCSVRow(String[] csvRowParts){
         assert csvRowParts.length == 3;
-        return new CryptoPrice(Timestamp.from(Instant.ofEpochSecond(Long.parseLong(csvRowParts[0]))),
+        return new CryptoPrice(Timestamp.from(Instant.ofEpochMilli(Long.parseLong(csvRowParts[0]))),
                 new BigDecimal(csvRowParts[2]));
     }
 }

@@ -13,7 +13,7 @@ public class PreloadDatabase {
     private static final String DIR_PATH = "./task/prices";
 
     @Bean
-    CommandLineRunner preloadDatabase(CryptoPriceReader reader){
+    CommandLineRunner initDatabase(CryptoPriceReader reader){
         return args -> {
             log.info("Preloading database with data from " + DIR_PATH);
             reader.persistAllCSVsInDirectory(DIR_PATH);
