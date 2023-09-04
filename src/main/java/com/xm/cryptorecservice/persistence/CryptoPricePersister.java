@@ -9,13 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.Lock;
 
 @RequiredArgsConstructor
 @Slf4j
 public class CryptoPricePersister implements Runnable {
 
-    private final Lock dbLock;
     private final DatabaseConnection dbConnection;
     private final File csv;
     private final CryptoPriceFileReader csvReader;
@@ -36,23 +34,13 @@ public class CryptoPricePersister implements Runnable {
     }
 
     private void createTable(String tableName){
-        dbLock.lock();
-        try {
-            log.info("Creating table corresponding to crypto: " + tableName);
-            dbConnection.createTable(tableName);
-            log.info("Created table corresponding to crypto: " + tableName);
-        } finally {
-            dbLock.unlock();
-        }
+        log.info("Creating table corresponding to crypto: " + tableName);
+        dbConnection.createTable(tableName);
+        log.info("Created table corresponding to crypto: " + tableName);
     }
 
     private void persistCryptoPrices(List<CryptoPrice> cryptoPrices, String tableName){
-        dbLock.lock();
-        try {
-            dbConnection.insertAll(tableName, cryptoPrices);
-            log.info("Inserted all prices for crypto: " + tableName);
-        } finally {
-            dbLock.unlock();
-        }
+        dbConnection.insertAll(tableName, cryptoPrices);
+        log.info("Inserted all prices for crypto: " + tableName);
     }
 }

@@ -13,8 +13,6 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @Service
@@ -23,18 +21,17 @@ public class CryptoDirectoryParser {
 
     private static final int MAX_THREADS = 10;
     private final DatabaseConnection db;
-    private final Lock dbLock = new ReentrantLock();
     private final CryptoPriceFileReader csvReader;
 
     public void persistAllCSVsInDirectory(String directory){
         List<File> csvs = Arrays.stream(Objects.requireNonNull(new File(directory).listFiles()))
-                .filter(file -> !file.isDirectory() &&
-                file.getName().endsWith(".csv")).toList();
+                .filter(file -> file.isFile() && file.getName().endsWith(".csv"))
+                .toList();
         int numWorkers = Math.min(csvs.size(), MAX_THREADS);
         ExecutorService workers = Executors.newFixedThreadPool(numWorkers);
         CountDownLatch latch = new CountDownLatch(numWorkers);
         for (File csv : csvs) {
-            workers.submit(new CryptoPricePersister(dbLock, db, csv, csvReader, latch));
+            workers.submit(new CryptoPricePersister(db, csv, csvReader, latch));
         }
         try {
             latch.await();

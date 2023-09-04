@@ -13,11 +13,11 @@ public class PreloadDatabase {
     private static final String DIR_PATH = "./task/prices";
 
     @Bean
-    CommandLineRunner initDatabase(CryptoDirectoryParser reader){
+    CommandLineRunner initDatabase(CryptoDirectoryParser directoryParser){
         return args -> {
             log.info("Preloading database with data from " + DIR_PATH);
             long timeStart = System.currentTimeMillis();
-            reader.persistAllCSVsInDirectory(DIR_PATH);
+            directoryParser.persistAllCSVsInDirectory(DIR_PATH);
             log.info("Loading database took: " + (System.currentTimeMillis() - timeStart) + " ms.");
         };
     }
