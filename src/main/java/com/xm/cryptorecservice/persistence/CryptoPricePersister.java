@@ -2,6 +2,7 @@ package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.io.CryptoPriceFileReader;
 import com.xm.cryptorecservice.model.CryptoPrice;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,9 @@ public class CryptoPricePersister implements Runnable {
 
     @Override
     public void run() {
-        String cryptoName = csv.getName().substring(0, csv.getName().length() - 4); // Assuming format "name.csv"
+        String cryptoName =
+                csv.getName()
+                        .substring(0, csv.getName().length() - 4); // Assuming format "name.csv"
         createTable(cryptoName);
         List<CryptoPrice> cryptoPrices = null;
         try {
@@ -33,14 +36,14 @@ public class CryptoPricePersister implements Runnable {
         latch.countDown();
     }
 
-    private void createTable(String tableName){
+    private void createTable(String tableName) {
         log.info("Creating table corresponding to crypto: " + tableName);
-        dbConnection.createTable(tableName);
+        dbConnection.createCryptoPriceTable(tableName);
         log.info("Created table corresponding to crypto: " + tableName);
     }
 
-    private void persistCryptoPrices(List<CryptoPrice> cryptoPrices, String tableName){
-        dbConnection.insertAll(tableName, cryptoPrices);
+    private void persistCryptoPrices(List<CryptoPrice> cryptoPrices, String tableName) {
+        dbConnection.insertAllCryptoPrices(tableName, cryptoPrices);
         log.info("Inserted all prices for crypto: " + tableName);
     }
 }
