@@ -30,6 +30,7 @@ public class CryptoPricePersister implements Runnable {
         try {
             cryptoPrices = csvReader.readCSV(csv);
         } catch (IOException e) {
+            log.warn("Exception received: " + e.getMessage());
             throw new RuntimeException(e);
         }
         persistCryptoPrices(cryptoPrices, cryptoName);

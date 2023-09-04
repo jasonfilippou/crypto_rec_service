@@ -27,7 +27,7 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
     public void createCryptoPriceTable(@NonNull String tableName) {
         String query =
                 String.format(
-                        "CREATE TABLE %s (id BIGINT NOT NULL AUTO_INCREMENT, timestamp TIMESTAMP NOT"
+                        "CREATE TABLE IF NOT EXISTS %s (id BIGINT NOT NULL AUTO_INCREMENT, timestamp TIMESTAMP NOT"
                                 + " NULL, price DECIMAL(20, 10) NOT NULL, PRIMARY KEY (id))",
                         tableName.toUpperCase(Locale.ROOT));
         jdbcTemplate.execute(query);
@@ -35,15 +35,20 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
 
     @Override
     public void createTableOfCryptoNames(@NonNull List<String> cryptoNames) {
-        String creationQuery =
+        // Create table if it does not exist
+        String createQuery =
                 String.format(
-                        "CREATE TABLE %s (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(10) NOT NULL, PRIMARY KEY (id))",
+                        "CREATE TABLE IF NOT EXISTS %s (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(10) NOT NULL, PRIMARY KEY (id))",
                         CRYPTO_NAME_TABLE_NAME);
-        jdbcTemplate.execute(creationQuery);
-        String insertionQuery =
+        jdbcTemplate.execute(createQuery);
+        // Truncate its data
+        String truncateQuery = String.format("TRUNCATE TABLE %s ", CRYPTO_NAME_TABLE_NAME);
+        jdbcTemplate.execute(truncateQuery);
+        // Insert the new data
+        String insertQuery =
                 String.format("INSERT INTO %s (name) VALUES (?)", CRYPTO_NAME_TABLE_NAME);
         jdbcTemplate.batchUpdate(
-                insertionQuery,
+                insertQuery,
                 cryptoNames,
                 NAMES_BATCH_SIZE,
                 (PreparedStatement ps, String s) -> ps.setString(1, s));
@@ -52,10 +57,13 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
     @Override
     public void insertAllCryptoPrices(
             @NonNull String tableName, @NonNull List<CryptoPrice> cryptoPrices) {
+        // Truncate
+        String truncateQuery = String.format("TRUNCATE TABLE %s", tableName);
+        jdbcTemplate.execute(truncateQuery);
         // Batch insert
-        String query = String.format("INSERT INTO %s (timestamp, price) VALUES (?, ?)", tableName);
+        String insertQuery = String.format("INSERT INTO %s (timestamp, price) VALUES (?, ?)", tableName);
         jdbcTemplate.batchUpdate(
-                query,
+                insertQuery,
                 cryptoPrices,
                 PRICES_BATCH_SIZE,
                 (PreparedStatement ps, CryptoPrice price) -> {
