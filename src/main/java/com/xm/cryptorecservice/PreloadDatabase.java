@@ -17,6 +17,7 @@ public class PreloadDatabase {
         return args -> {
             log.info("Preloading database with data from " + DIR_PATH);
             reader.persistAllCSVsInDirectory(DIR_PATH);
+            log.info("Preloaded database.");
         };
     }
 }

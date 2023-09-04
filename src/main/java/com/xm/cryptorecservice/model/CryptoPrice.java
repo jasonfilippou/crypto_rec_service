@@ -4,9 +4,16 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Data
 public class CryptoPrice {
-    private Timestamp timestamp;
-    private BigDecimal price;
+    private final Timestamp timestamp;
+    private final BigDecimal price;
+
+    public static CryptoPrice fromCSVRow(String[] csvRowParts){
+        assert csvRowParts.length == 3;
+        return new CryptoPrice(Timestamp.from(Instant.ofEpochSecond(Long.parseLong(csvRowParts[0]))),
+                new BigDecimal(csvRowParts[2]));
+    }
 }
