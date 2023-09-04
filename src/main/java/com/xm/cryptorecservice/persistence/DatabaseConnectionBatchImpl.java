@@ -5,6 +5,7 @@ import com.xm.cryptorecservice.model.CryptoPrice;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -75,9 +76,13 @@ public class DatabaseConnectionBatchImpl implements DatabaseConnection {
     @Override
     public Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id) {
         String query =
-                String.format("SELECT FROM %s WHERE ID = ?", cryptoName.toUpperCase(Locale.ROOT));
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject(
-                        query, new BeanPropertyRowMapper<>(CryptoPrice.class), id));
+                String.format("SELECT * FROM %s WHERE ID = ?", cryptoName.toUpperCase(Locale.ROOT));
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            query, new BeanPropertyRowMapper<>(CryptoPrice.class), id));
+        } catch(EmptyResultDataAccessException exc){ // queryForObject will throw this if the result set is empty
+            return Optional.empty();
+        }
     }
 }

@@ -1,18 +1,21 @@
 package com.xm.cryptorecservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CryptoPrice {
-    private final Timestamp timestamp;
-    private final BigDecimal price;
+    private  Timestamp timestamp;
+    private  BigDecimal price;
 
     public static CryptoPrice fromCSVRow(String[] csvRowParts) {
-        assert csvRowParts.length == 3;
         return new CryptoPrice(
                 Timestamp.from(Instant.ofEpochMilli(Long.parseLong(csvRowParts[0]))),
                 new BigDecimal(csvRowParts[2]));
