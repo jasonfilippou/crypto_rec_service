@@ -47,8 +47,5 @@ public class CryptoDirectoryParser {
                 .toList();
         db.createTableOfCryptoNames(cryptoNames);
         inMemoryCryptoNameDB.initialize(cryptoNames); // For efficiency of later queries.
-        for(String crypto : cryptoNames){
-            System.out.println("Crypto " + crypto + " has price with ID 1: " + db.getCryptoPriceById(crypto, 1L));
-        }
     }
 }
