@@ -1,5 +1,6 @@
 package com.xm.cryptorecservice.util.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class ExceptionAdvice {
         HttpMessageNotReadableException.class,
         MethodArgumentNotValidException.class,
         MethodArgumentTypeMismatchException.class,
+        ConstraintViolationException.class,
         BadDateFormatException.class,
         UnsupportedCryptoException.class,
         HibernateException.class
