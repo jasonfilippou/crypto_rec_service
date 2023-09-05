@@ -2,9 +2,8 @@ package com.xm.cryptorecservice.io;
 
 import com.xm.cryptorecservice.persistence.CryptoPricePersister;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
-
-import com.xm.cryptorecservice.util.InMemoryStats;
 import com.xm.cryptorecservice.util.logger.Logged;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +26,6 @@ public class CryptoDirectoryParser {
     private static final int MAX_THREADS = 10;
     private final DatabaseConnection db;
     private final CryptoPriceFileReader csvReader;
-    private final InMemoryStats inMemoryCryptoNameDB;
 
     public List<String> persistAllCSVsInDirectory(String directory) {
         List<File> csvs =

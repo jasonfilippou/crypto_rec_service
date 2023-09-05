@@ -1,43 +1,29 @@
 package com.xm.cryptorecservice.model.crypto;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class CryptoPriceStats {
-    private final BigDecimal minPrice;
-    private final BigDecimal maxPrice;
-    private final BigDecimal firstPrice;
-    private final BigDecimal lastPrice;
-
-    // Caching some stats to avoid potentially expensive BigDecimal re-computations.
-    private BigDecimal priceRange;
-    private BigDecimal priceDifference;
-    private BigDecimal normalizedPrice;
+    private BigDecimal minPrice;
+    private BigDecimal maxPrice;
+    private BigDecimal firstPrice;
+    private BigDecimal lastPrice;
 
     public BigDecimal getPriceRange(){
-        if(priceRange == null){
-            priceRange = maxPrice.subtract(minPrice);
-        }
-        return priceRange;
+        return maxPrice.subtract(minPrice);
     }
 
     public BigDecimal getNormalizedPrice(){
-        if (normalizedPrice == null) {
-            normalizedPrice = getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
-        }
-        return normalizedPrice;
+        return getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
     }
 
     public BigDecimal getPriceDifference(){
-        if(priceDifference == null){
-            priceDifference = lastPrice.subtract(firstPrice);
-        }
-        return priceDifference;
+        return lastPrice.subtract(firstPrice);
     }
 
     public boolean gain(){

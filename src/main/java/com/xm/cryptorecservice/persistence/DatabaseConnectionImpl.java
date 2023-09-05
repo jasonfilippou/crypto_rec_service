@@ -94,17 +94,11 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
 
     @Override
     public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName) {
-        /*
-        SELECT (select min(price) from DOGE) as 'minprice',
-        (select max(price) from DOGE) as 'maxprice',
-        (select price from DOGE order by timestamp asc LIMIT 1) as 'first',
-        (select price from DOGE order by timestamp desc LIMIT 1) as 'last'
-         */
         String selectQuery = String.format("""
                 SELECT (select min(price) from %1$s) as 'minprice',\s
                 (select max(price) from %1$s) as 'maxprice',\s
-                (select price from %1$s order by timestamp asc limit 1) as 'first',\s
-                (select price from %1$s order by timestamp desc limit 1) as 'last'""", cryptoName);
+                (select price from %1$s order by timestamp asc limit 1) as 'firstprice',\s
+                (select price from %1$s order by timestamp desc limit 1) as 'lastprice'""", cryptoName);
 
         try {
             return Optional.ofNullable(

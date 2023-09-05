@@ -28,4 +28,10 @@ public class InMemoryStats {
     public boolean containsCrypto(String crypto){
         return cryptoPriceStats.containsKey(crypto);
     }
+
+    public void printAllStats(){
+        for(Map.Entry<String, CryptoPriceStats> entry: cryptoPriceStats.entrySet()){
+            System.out.println(entry.getKey() + "->" + entry.getValue());
+        }
+    }
 }
