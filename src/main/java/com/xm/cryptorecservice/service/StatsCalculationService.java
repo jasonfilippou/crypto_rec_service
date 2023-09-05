@@ -14,12 +14,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.xm.cryptorecservice.util.Constants.MAX_THREADS;
+
 @Service
 @RequiredArgsConstructor
 @Logged
 public class StatsCalculationService {
-
-    private static final int MAX_THREADS = 10;
 
     private final DatabaseConnection dbConnection;
     private final InMemoryAggregateStats inMemoryDb;

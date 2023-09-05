@@ -17,13 +17,14 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.xm.cryptorecservice.util.Constants.MAX_THREADS;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Logged
 public class CryptoDirectoryParser {
 
-    private static final int MAX_THREADS = 10;
     private final DatabaseConnection db;
     private final CryptoPriceFileReader csvReader;
 

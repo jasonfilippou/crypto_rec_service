@@ -21,6 +21,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.xm.cryptorecservice.util.Constants.MAX_THREADS;
+
 @Service
 @RequiredArgsConstructor
 @Logged
@@ -28,7 +30,6 @@ public class CryptoRecService {
 
     private final DatabaseConnection onDiskDb;
     private final InMemoryAggregateStats inMemoryDb;
-    private final static int MAX_THREADS = 10;
     public Map<String, CryptoPriceStats> getAggregateStats() {
         return inMemoryDb.copyOfStats();
     }

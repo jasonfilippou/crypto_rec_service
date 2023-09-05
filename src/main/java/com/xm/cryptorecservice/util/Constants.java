@@ -45,4 +45,11 @@ public final class Constants {
      *  Maximum number of decimal digits we allow in a {@link java.math.BigDecimal} instance in our app.
      */
     public static final int BIG_DECIMAL_SCALE = 10;
+
+    /**
+     * Maximum number of threads that we employ in fixed thread pools
+     * to parallelize tasks across several cryptos.
+     */
+    public static final int MAX_THREADS = 10;
+
 }
