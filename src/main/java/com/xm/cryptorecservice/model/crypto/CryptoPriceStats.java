@@ -14,16 +14,32 @@ public class CryptoPriceStats {
     private BigDecimal firstPrice;
     private BigDecimal lastPrice;
 
+    // Fields used for caching results of BigDecimal operations,
+    // which can be computationally intensive.
+
+    private BigDecimal priceRange;
+    private BigDecimal priceDifference;
+    private BigDecimal normalizedPrice;
+
     public BigDecimal getPriceRange(){
-        return maxPrice.subtract(minPrice);
+        if(priceRange == null){
+            priceRange = maxPrice.subtract(minPrice);
+        }
+        return priceRange;
     }
 
     public BigDecimal getNormalizedPrice(){
-        return getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
+        if(normalizedPrice == null){
+            normalizedPrice = getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
+        }
+        return normalizedPrice;
     }
 
-    public BigDecimal getPriceDifference(){
-        return lastPrice.subtract(firstPrice);
+    public BigDecimal getPriceDifference() {
+        if (priceDifference == null) {
+            priceDifference = lastPrice.subtract(firstPrice);
+        }
+        return priceDifference;
     }
 
     public boolean gain(){

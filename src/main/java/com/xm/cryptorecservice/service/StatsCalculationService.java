@@ -27,7 +27,7 @@ public class StatsCalculationService {
     
     public void computeAndLoadAllStats(List<String> cryptos){
         // We will launch multiple workers for the computation of these stats
-        // and take advantage of the fact that ConcurrentHashMap is thread-safe.
+        // and take advantage of the fact that InMemoryStats is a thread-safe class.
         int numWorkers = Math.min(MAX_THREADS, cryptos.size());
         ExecutorService workers = Executors.newFixedThreadPool(numWorkers);
         CountDownLatch latch = new CountDownLatch(numWorkers);
