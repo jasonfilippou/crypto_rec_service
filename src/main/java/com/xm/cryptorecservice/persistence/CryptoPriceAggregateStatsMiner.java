@@ -4,15 +4,13 @@ import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
 import com.xm.cryptorecservice.util.logger.Logged;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
-@Slf4j
 @RequiredArgsConstructor
 @Logged
-public class CryptoPriceStatsMiner implements Runnable {
+public class CryptoPriceAggregateStatsMiner implements Runnable {
     private final DatabaseConnection dbConnection;
     private final InMemoryAggregateStats inMemoryDb;
     private final String cryptoName;

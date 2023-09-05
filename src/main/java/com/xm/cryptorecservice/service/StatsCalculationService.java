@@ -1,6 +1,6 @@
 package com.xm.cryptorecservice.service;
 
-import com.xm.cryptorecservice.persistence.CryptoPriceStatsMiner;
+import com.xm.cryptorecservice.persistence.CryptoPriceAggregateStatsMiner;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
 import com.xm.cryptorecservice.persistence.InMemoryAggregateStats;
 import com.xm.cryptorecservice.util.logger.Logged;
@@ -31,7 +31,7 @@ public class StatsCalculationService {
         ExecutorService workers = Executors.newFixedThreadPool(numWorkers);
         CountDownLatch latch = new CountDownLatch(numWorkers);
         for (String crypto : cryptos) {
-            workers.submit(new CryptoPriceStatsMiner(dbConnection, inMemoryDb, crypto, latch));
+            workers.submit(new CryptoPriceAggregateStatsMiner(dbConnection, inMemoryDb, crypto, latch));
         }
         try {
             latch.await();
