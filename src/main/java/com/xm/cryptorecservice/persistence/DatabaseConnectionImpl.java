@@ -1,9 +1,12 @@
 package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
+import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
+import com.xm.cryptorecservice.util.logger.Logged;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,6 +20,8 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Logged
+@Slf4j
 public class DatabaseConnectionImpl implements DatabaseConnection {
 
     private static final int PRICES_BATCH_SIZE = 100;
@@ -82,6 +87,31 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
                     jdbcTemplate.queryForObject(
                             query, new BeanPropertyRowMapper<>(CryptoPrice.class), id));
         } catch(EmptyResultDataAccessException exc){ // queryForObject will throw this if the result set is empty
+            log.warn("Empty result encountered when looking for ID {} in table {}", id, cryptoName);
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName) {
+        /*
+        SELECT (select min(price) from DOGE) as 'minprice',
+        (select max(price) from DOGE) as 'maxprice',
+        (select price from DOGE order by timestamp asc LIMIT 1) as 'first',
+        (select price from DOGE order by timestamp desc LIMIT 1) as 'last'
+         */
+        String selectQuery = String.format("""
+                SELECT (select min(price) from %1$s) as 'minprice',\s
+                (select max(price) from %1$s) as 'maxprice',\s
+                (select price from %1$s order by timestamp asc limit 1) as 'first',\s
+                (select price from %1$s order by timestamp desc limit 1) as 'last'""", cryptoName);
+
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            selectQuery, new BeanPropertyRowMapper<>(CryptoPriceStats.class)));
+        } catch(EmptyResultDataAccessException exc){
+            log.warn("Empty result encountered when getting stats from table {}", cryptoName);
             return Optional.empty();
         }
     }

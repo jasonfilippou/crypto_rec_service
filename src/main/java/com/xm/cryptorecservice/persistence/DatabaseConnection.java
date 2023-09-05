@@ -2,6 +2,7 @@ package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 
+import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
 import lombok.NonNull;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface DatabaseConnection {
     void insertAllCryptoPrices(@NonNull String tableName, @NonNull List<CryptoPrice> cryptoPrices);
 
     Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id);
+
+    Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName);
 }
