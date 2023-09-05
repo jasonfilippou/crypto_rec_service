@@ -3,7 +3,7 @@ package com.xm.cryptorecservice.service;
 
 import com.xm.cryptorecservice.persistence.CryptoPriceStatsMiner;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
-import com.xm.cryptorecservice.util.InMemoryStats;
+import com.xm.cryptorecservice.util.InMemoryAggregateStats;
 
 import com.xm.cryptorecservice.util.logger.Logged;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class StatsCalculationService {
     private static final int MAX_THREADS = 10;
 
     private final DatabaseConnection dbConnection;
-    private final InMemoryStats inMemoryDb;
+    private final InMemoryAggregateStats inMemoryDb;
     
     public void computeAndLoadAllStats(List<String> cryptos){
         // We will launch multiple workers for the computation of these stats

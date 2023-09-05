@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author jason 
  */
 @Component
-public class InMemoryStats {
+public class InMemoryAggregateStats {
 
     private final Map<String, CryptoPriceStats> cryptoPriceStats = new ConcurrentHashMap<>();
     public void add(String crypto, CryptoPriceStats stats){

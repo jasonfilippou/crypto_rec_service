@@ -1,7 +1,7 @@
 package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
-import com.xm.cryptorecservice.util.InMemoryStats;
+import com.xm.cryptorecservice.util.InMemoryAggregateStats;
 import com.xm.cryptorecservice.util.logger.Logged;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 @Logged
 public class CryptoPriceStatsMiner implements Runnable{
     private final DatabaseConnection dbConnection;
-    private final InMemoryStats inMemoryDb;
+    private final InMemoryAggregateStats inMemoryDb;
     private final String cryptoName;
     private final CountDownLatch latch;
 

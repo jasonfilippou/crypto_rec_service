@@ -81,7 +81,7 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     @Override
     public Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id) {
         String query =
-                String.format("SELECT * FROM %s WHERE ID = ?", cryptoName.toUpperCase(Locale.ROOT));
+                String.format("SELECT timestamp, trim(price)+0 FROM %s WHERE ID = ?", cryptoName.toUpperCase(Locale.ROOT));
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
@@ -95,11 +95,10 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     @Override
     public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName) {
         String selectQuery = String.format("""
-                SELECT (select min(price) from %1$s) as 'minprice',\s
-                (select max(price) from %1$s) as 'maxprice',\s
-                (select price from %1$s order by timestamp asc limit 1) as 'firstprice',\s
-                (select price from %1$s order by timestamp desc limit 1) as 'lastprice'""", cryptoName);
-
+                SELECT (select min(trim(price)+0) from %1$s) as 'minprice',\s
+                (select max(trim(price)+0) from %1$s) as 'maxprice',\s
+                (select trim(price)+0 from %1$s order by timestamp asc limit 1) as 'firstprice',\s
+                (select trim(price)+0 from %1$s order by timestamp desc limit 1) as 'lastprice'""", cryptoName);
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
