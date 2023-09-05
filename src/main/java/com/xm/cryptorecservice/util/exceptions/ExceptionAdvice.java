@@ -28,6 +28,7 @@ public class ExceptionAdvice {
     MethodArgumentNotValidException.class,
     MethodArgumentTypeMismatchException.class,
     BadDateFormatException.class,
+    UnsupportedCryptoException.class,
     HibernateException.class
   })
   @ResponseStatus(HttpStatus.BAD_REQUEST)
