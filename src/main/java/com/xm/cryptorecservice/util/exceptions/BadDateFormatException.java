@@ -7,7 +7,7 @@ package com.xm.cryptorecservice.util.exceptions;
  */
 public class BadDateFormatException extends RuntimeException {
 
-  public BadDateFormatException(String msg) {
-    super(msg);
-  }
+    public BadDateFormatException(String msg) {
+        super(msg);
+    }
 }

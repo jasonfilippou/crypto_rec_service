@@ -19,17 +19,15 @@ public class CryptoRecService {
     private final DatabaseConnection onDiskDb;
     private final InMemoryAggregateStats inMemoryDb;
 
-    public Map<String, CryptoPriceStats> getAggregateStats(){
+    public Map<String, CryptoPriceStats> getAggregateStats() {
         return inMemoryDb.copyOfStats();
     }
-    
-    public boolean cryptoSupported(String cryptoName){
+
+    public boolean cryptoSupported(String cryptoName) {
         return inMemoryDb.containsCrypto(cryptoName);
     }
-    
-    public CryptoPriceStats getAggregateStatsOfCrypto(String cryptoName){
+
+    public CryptoPriceStats getAggregateStatsOfCrypto(String cryptoName) {
         return inMemoryDb.get(cryptoName);
     }
-
-
 }

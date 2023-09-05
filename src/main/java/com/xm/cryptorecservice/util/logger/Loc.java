@@ -7,6 +7,6 @@ package com.xm.cryptorecservice.util.logger;
  * @see MethodLoggingMessages
  */
 public enum Loc {
-  BEGIN,
-  END
+    BEGIN,
+    END
 }

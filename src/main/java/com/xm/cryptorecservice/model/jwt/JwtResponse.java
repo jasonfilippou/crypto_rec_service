@@ -20,6 +20,6 @@ import java.io.Serializable;
 @ToString
 public class JwtResponse implements Serializable {
 
-  @Serial private static final long serialVersionUID = -8091879091924046844L;
-  @ToString.Exclude private final String jwtToken;
+    @Serial private static final long serialVersionUID = -8091879091924046844L;
+    @ToString.Exclude private final String jwtToken;
 }

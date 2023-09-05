@@ -24,17 +24,17 @@ import java.io.Serializable;
 @ToString
 public class JwtRequest implements Serializable {
 
-  private static final long serialVersionId = 5926468583005150707L;
+    private static final long serialVersionId = 5926468583005150707L;
 
-  @Schema(example = "jason.filippou@gmail.com")
-  @NonNull
-  @NotBlank
-  @Email
-  private String email;
+    @Schema(example = "jason.filippou@gmail.com")
+    @NonNull
+    @NotBlank
+    @Email
+    private String email;
 
-  @Schema(example = "jasonfilippoupass")
-  @Size(min = 8, max = 30)
-  @NonNull
-  @ToString.Exclude
-  private String password;
+    @Schema(example = "jasonfilippoupass")
+    @Size(min = 8, max = 30)
+    @NonNull
+    @ToString.Exclude
+    private String password;
 }

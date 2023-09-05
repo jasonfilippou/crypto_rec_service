@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 @RequiredArgsConstructor
 @Logged
-public class CryptoPriceStatsMiner implements Runnable{
+public class CryptoPriceStatsMiner implements Runnable {
     private final DatabaseConnection dbConnection;
     private final InMemoryAggregateStats inMemoryDb;
     private final String cryptoName;

@@ -20,46 +20,48 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @OpenAPIDefinition(
-    info =
-        @Info(
-            title = "XM Crypto Recommendation Service API",
-            version = "${api.version}",
-            contact =
-                @Contact(
-                    name = "Jason Filippou",
-                    email = "jason.filippou@gmail.com",
-                    url = "https://www.jasonfilippou.com"),
-            license =
-                @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"),
-            termsOfService = "${tos.uri}",
-            description = "${api.description}"),
-    servers = {
-      @Server(url = "http://localhost:8080", description = "Development"),
-      @Server(url = "${api.server.url}", description = "Production")
-    })
+        info =
+                @Info(
+                        title = "XM Crypto Recommendation Service API",
+                        version = "${api.version}",
+                        contact =
+                                @Contact(
+                                        name = "Jason Filippou",
+                                        email = "jason.filippou@gmail.com",
+                                        url = "https://www.jasonfilippou.com"),
+                        license =
+                                @License(
+                                        name = "Apache 2.0",
+                                        url = "https://www.apache.org/licenses/LICENSE-2.0"),
+                        termsOfService = "${tos.uri}",
+                        description = "${api.description}"),
+        servers = {
+            @Server(url = "http://localhost:8080", description = "Development"),
+            @Server(url = "${api.server.url}", description = "Production")
+        })
 public class OpenAPI30Configuration {
 
-  /**
-   * Configure the OpenAPI components.
-   *
-   * @return Returns fully configured OpenAPI object
-   * @see OpenAPI
-   */
-  @Bean
-  public OpenAPI customizeOpenAPI() {
-    final String securitySchemeName = "bearerAuth";
-    return new OpenAPI()
-        .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-        .components(
-            new Components()
-                .addSecuritySchemes(
-                    securitySchemeName,
-                    new SecurityScheme()
-                        .name(securitySchemeName)
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .description(
-                            "Provide the JWT token. JWT token can be obtained from the \"authenticate\" endpoint.")
-                        .bearerFormat("JWT")));
-  }
+    /**
+     * Configure the OpenAPI components.
+     *
+     * @return Returns fully configured OpenAPI object
+     * @see OpenAPI
+     */
+    @Bean
+    public OpenAPI customizeOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(
+                        new Components()
+                                .addSecuritySchemes(
+                                        securitySchemeName,
+                                        new SecurityScheme()
+                                                .name(securitySchemeName)
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .description(
+                                                        "Provide the JWT token. JWT token can be obtained from the \"authenticate\" endpoint.")
+                                                .bearerFormat("JWT")));
+    }
 }

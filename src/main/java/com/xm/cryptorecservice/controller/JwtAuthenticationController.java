@@ -52,16 +52,22 @@ public class JwtAuthenticationController {
     @Operation(summary = "Authenticate with your username and password")
     @ApiResponses(
             value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Authentication successful, JWT returned.",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = JwtResponse.class))
-                            }),
-                    @ApiResponse(responseCode = "401", description = "Bad password.", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Username not found.", content = @Content)
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "Authentication successful, JWT returned.",
+                        content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = JwtResponse.class))
+                        }),
+                @ApiResponse(
+                        responseCode = "401",
+                        description = "Bad password.",
+                        content = @Content),
+                @ApiResponse(
+                        responseCode = "404",
+                        description = "Username not found.",
+                        content = @Content)
             })
     @PostMapping(value = "/authenticate")
     public ResponseEntity<JwtResponse> authenticate(
@@ -78,30 +84,30 @@ public class JwtAuthenticationController {
     /**
      * A POST endpoint for registering users.
      *
-     * @param user An instance of {@link UserDto} containing a username and password for the user. The
-     *     password will be stored in encrypted format in the database.
+     * @param user An instance of {@link UserDto} containing a username and password for the user.
+     *     The password will be stored in encrypted format in the database.
      * @return An instance of {@link ResponseEntity} over a {@link UserDto} instance.
      */
     @Operation(summary = "Register with your username and password")
     @ApiResponses(
             value = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Registration successful.",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = UserDto.class))
-                            }),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description =
-                                    "Invalid password length provided; passwords should be from 8 to 30 characters.",
-                            content = @Content),
-                    @ApiResponse(
-                            responseCode = "409",
-                            description = "Username already taken.",
-                            content = @Content)
+                @ApiResponse(
+                        responseCode = "201",
+                        description = "Registration successful.",
+                        content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDto.class))
+                        }),
+                @ApiResponse(
+                        responseCode = "400",
+                        description =
+                                "Invalid password length provided; passwords should be from 8 to 30 characters.",
+                        content = @Content),
+                @ApiResponse(
+                        responseCode = "409",
+                        description = "Username already taken.",
+                        content = @Content)
             })
     @PostMapping(value = "/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody @Valid UserDto user) {

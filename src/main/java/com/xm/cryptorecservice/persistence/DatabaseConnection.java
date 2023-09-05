@@ -1,8 +1,8 @@
 package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
-
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
+
 import lombok.NonNull;
 
 import java.util.List;

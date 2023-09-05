@@ -14,27 +14,26 @@ import lombok.*;
 
 /**
  * DTO class for Users.
- * 
+ *
  * @see UserEntity
- * 
- * @author jason 
+ * @author jason
  */
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserDto {
 
-  @Schema(example = "jason.filippou@gmail.com")
-  @NonNull
-  @NotBlank
-  @Email
-  @Size(min = 5, max = 50)
-  private String email;
+    @Schema(example = "jason.filippou@gmail.com")
+    @NonNull
+    @NotBlank
+    @Email
+    @Size(min = 5, max = 50)
+    private String email;
 
-  @Schema(example = "jasonfilippoupass")
-  @JsonProperty(access = WRITE_ONLY)
-  @NonNull
-  @ToString.Exclude
-  @Size(min = 8, max = 30)
-  private String password;
+    @Schema(example = "jasonfilippoupass")
+    @JsonProperty(access = WRITE_ONLY)
+    @NonNull
+    @ToString.Exclude
+    @Size(min = 8, max = 30)
+    private String password;
 }

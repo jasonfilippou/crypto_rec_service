@@ -42,9 +42,10 @@ public class CryptoDirectoryParser {
             latch.await();
         } catch (InterruptedException ignored) {
         }
-        List<String> cryptoNames = csvs.stream()
-                .map(file -> file.getName().substring(0, file.getName().length() - 4))
-                .toList();
+        List<String> cryptoNames =
+                csvs.stream()
+                        .map(file -> file.getName().substring(0, file.getName().length() - 4))
+                        .toList();
         db.createTableOfCryptoNames(cryptoNames);
         return cryptoNames;
     }

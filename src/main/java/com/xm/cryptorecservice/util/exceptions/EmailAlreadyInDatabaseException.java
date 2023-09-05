@@ -11,10 +11,10 @@ import lombok.Getter;
 @Getter
 public class EmailAlreadyInDatabaseException extends RuntimeException {
 
-  private final String username;
+    private final String username;
 
-  public EmailAlreadyInDatabaseException(String username) {
-    super("Username " + username + " already in database.");
-    this.username = username;
-  }
+    public EmailAlreadyInDatabaseException(String username) {
+        super("Username " + username + " already in database.");
+        this.username = username;
+    }
 }

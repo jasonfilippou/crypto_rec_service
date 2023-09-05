@@ -9,5 +9,5 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class ExceptionMessageContainer {
-  public String message;
+    public String message;
 }

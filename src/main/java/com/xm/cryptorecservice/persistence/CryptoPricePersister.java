@@ -2,8 +2,8 @@ package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.io.CryptoPriceFileReader;
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
-
 import com.xm.cryptorecservice.util.logger.Logged;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

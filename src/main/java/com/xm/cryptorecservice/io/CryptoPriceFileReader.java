@@ -6,8 +6,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
-
 import com.xm.cryptorecservice.util.logger.Logged;
+
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -28,10 +28,8 @@ public class CryptoPriceFileReader {
                 new CSVReaderBuilder(reader).withSkipLines(1).withCSVParser(parser).build()) {
             return csvReader.readAll().stream()
                     .map(CryptoPrice::fromCSVRow)
-                    .collect(
-                            Collectors
-                                    .toList()); // memory-intensive operation, consider
-                                                // parallelStream
+                    .collect(Collectors.toList()); // memory-intensive operation, consider
+            // parallelStream
         } catch (CsvException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

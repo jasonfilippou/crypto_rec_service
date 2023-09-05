@@ -1,9 +1,10 @@
 package com.xm.cryptorecservice.config;
 
-
 import com.xm.cryptorecservice.service.jwt.JwtUserDetailsService;
 import com.xm.cryptorecservice.util.jwt.JwtRequestFilter;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,69 +32,69 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private final UserDetailsService jwtUserDetailsService;
-  private final JwtRequestFilter jwtRequestFilter;
-  private final PasswordEncoder passwordEncoder;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UserDetailsService jwtUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final PasswordEncoder passwordEncoder;
 
-  /**
-   * Define {@link AuthenticationManager bean}.
-   *
-   * @param httpSecurity A {@link HttpSecurity} instance.
-   * @return A {@link AuthenticationManager} instance that knows which service to call for obtaining
-   *     {@link UserDetails} and is aware of the password encryption scheme.
-   * @throws Exception If the {@link AuthenticationManagerBuilder} used underneath throws it while
-   *     setting the {@link UserDetailsService} to use.
-   * @see UserDetailsService
-   * @see JwtUserDetailsService
-   */
-  @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-    AuthenticationManagerBuilder authenticationManagerBuilder =
-        httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-    authenticationManagerBuilder
-        .userDetailsService(jwtUserDetailsService)
-        .passwordEncoder(passwordEncoder);
-    return authenticationManagerBuilder.build();
-  }
+    /**
+     * Define {@link AuthenticationManager bean}.
+     *
+     * @param httpSecurity A {@link HttpSecurity} instance.
+     * @return A {@link AuthenticationManager} instance that knows which service to call for
+     *     obtaining {@link UserDetails} and is aware of the password encryption scheme.
+     * @throws Exception If the {@link AuthenticationManagerBuilder} used underneath throws it while
+     *     setting the {@link UserDetailsService} to use.
+     * @see UserDetailsService
+     * @see JwtUserDetailsService
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
+                .userDetailsService(jwtUserDetailsService)
+                .passwordEncoder(passwordEncoder);
+        return authenticationManagerBuilder.build();
+    }
 
-  /**
-   * Define the {@link SecurityFilterChain}bean.
-   *
-   * @param http An instance of {@link HttpSecurity}
-   * @return A fully defined {@link SecurityFilterChain} with endpoints to permit without
-   *     authentication, defined authentication entry point, session creation policy, etc.
-   * @throws Exception If {@link HttpSecurity#build()} throws it.
-   * @see SecurityFilterChain
-   */
-  @SuppressWarnings({"deprecated", "removal"})
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors()
-        .and()
-        .csrf()
-        .disable()
-        .authorizeRequests()
-        .requestMatchers(
-            "/cryptorecapi/register",
-            "/cryptorecapi/authenticate",
-            "/swagger-ui-custom.html",
-            "/swagger-ui.html",
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/webjars/**",
-            "/swagger-ui/index.html",
-            "/api-docs/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .exceptionHandling()
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    return http.build();
-  }
+    /**
+     * Define the {@link SecurityFilterChain}bean.
+     *
+     * @param http An instance of {@link HttpSecurity}
+     * @return A fully defined {@link SecurityFilterChain} with endpoints to permit without
+     *     authentication, defined authentication entry point, session creation policy, etc.
+     * @throws Exception If {@link HttpSecurity#build()} throws it.
+     * @see SecurityFilterChain
+     */
+    @SuppressWarnings({"deprecated", "removal"})
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors()
+                .and()
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .requestMatchers(
+                        "/cryptorecapi/register",
+                        "/cryptorecapi/authenticate",
+                        "/swagger-ui-custom.html",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/webjars/**",
+                        "/swagger-ui/index.html",
+                        "/api-docs/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 }

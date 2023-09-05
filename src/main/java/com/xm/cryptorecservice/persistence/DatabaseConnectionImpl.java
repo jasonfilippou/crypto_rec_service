@@ -67,7 +67,8 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
         String truncateQuery = String.format("TRUNCATE TABLE %s", tableName);
         jdbcTemplate.execute(truncateQuery);
         // Batch insert
-        String insertQuery = String.format("INSERT INTO %s (timestamp, price) VALUES (?, ?)", tableName);
+        String insertQuery =
+                String.format("INSERT INTO %s (timestamp, price) VALUES (?, ?)", tableName);
         jdbcTemplate.batchUpdate(
                 insertQuery,
                 cryptoPrices,
@@ -81,12 +82,16 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     @Override
     public Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id) {
         String query =
-                String.format("SELECT timestamp, trim(price)+0 FROM %s WHERE ID = ?", cryptoName.toUpperCase(Locale.ROOT));
+                String.format(
+                        "SELECT timestamp, trim(price)+0 FROM %s WHERE ID = ?",
+                        cryptoName.toUpperCase(Locale.ROOT));
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
                             query, new BeanPropertyRowMapper<>(CryptoPrice.class), id));
-        } catch(EmptyResultDataAccessException exc){ // queryForObject will throw this if the result set is empty
+        } catch (
+                EmptyResultDataAccessException
+                        exc) { // queryForObject will throw this if the result set is empty
             log.warn("Empty result encountered when looking for ID {} in table {}", id, cryptoName);
             return Optional.empty();
         }
@@ -94,16 +99,19 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
 
     @Override
     public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName) {
-        String selectQuery = String.format("""
+        String selectQuery =
+                String.format(
+                        """
                 SELECT (select min(trim(price)+0) from %1$s) as 'minprice',\s
                 (select max(trim(price)+0) from %1$s) as 'maxprice',\s
                 (select trim(price)+0 from %1$s order by timestamp asc limit 1) as 'firstprice',\s
-                (select trim(price)+0 from %1$s order by timestamp desc limit 1) as 'lastprice'""", cryptoName);
+                (select trim(price)+0 from %1$s order by timestamp desc limit 1) as 'lastprice'""",
+                        cryptoName);
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
                             selectQuery, new BeanPropertyRowMapper<>(CryptoPriceStats.class)));
-        } catch(EmptyResultDataAccessException exc){
+        } catch (EmptyResultDataAccessException exc) {
             log.warn("Empty result encountered when getting stats from table {}", cryptoName);
             return Optional.empty();
         }

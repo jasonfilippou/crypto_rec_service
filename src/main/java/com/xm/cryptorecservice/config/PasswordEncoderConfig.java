@@ -14,13 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class PasswordEncoderConfig {
 
-  /**
-   * Define a Spring Bean of type {@link PasswordEncoder} for the various components to use.
-   *
-   * @return An instance of type {@link PasswordEncoder}.
-   */
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    /**
+     * Define a Spring Bean of type {@link PasswordEncoder} for the various components to use.
+     *
+     * @return An instance of type {@link PasswordEncoder}.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -21,15 +21,15 @@ public class CryptoPriceStats {
     private BigDecimal priceDifference;
     private BigDecimal normalizedPrice;
 
-    public BigDecimal getPriceRange(){
-        if(priceRange == null){
+    public BigDecimal getPriceRange() {
+        if (priceRange == null) {
             priceRange = maxPrice.subtract(minPrice);
         }
         return priceRange;
     }
 
-    public BigDecimal getNormalizedPrice(){
-        if(normalizedPrice == null){
+    public BigDecimal getNormalizedPrice() {
+        if (normalizedPrice == null) {
             normalizedPrice = getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
         }
         return normalizedPrice;
@@ -42,15 +42,15 @@ public class CryptoPriceStats {
         return priceDifference;
     }
 
-    public boolean gain(){
+    public boolean gain() {
         return getPriceDifference().compareTo(BigDecimal.ZERO) > 0;
     }
 
-    public boolean loss(){
+    public boolean loss() {
         return getPriceDifference().compareTo(BigDecimal.ZERO) < 0;
     }
 
-    public boolean neitherGainNorLoss(){
+    public boolean neitherGainNorLoss() {
         return getPriceDifference().compareTo(BigDecimal.ZERO) == 0;
     }
 }
