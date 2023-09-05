@@ -64,15 +64,15 @@ public class CryptoRecController {
                         content = @Content),
                 @ApiResponse(
                         responseCode = "400",
-                        description = "Unsupported cryptocurrency provided",
+                        description = "Unsupported cryptocurrency or blank name provided",
                         content = @Content),
                 @ApiResponse(
                         responseCode = "401",
                         description = "Unauthenticated user",
                         content = @Content),
             })
-    @GetMapping("/aggregate/{cryptoName}") // TODO: will the same endpoint ("/aggregate") work?
-    public ResponseEntity<?> getAggregateStats(@PathVariable String cryptoName)
+    @GetMapping("/aggregate/{cryptoName}")
+    public ResponseEntity<?> getAggregateStats(@PathVariable @NotBlank String cryptoName)
             throws UnsupportedCryptoException {
         cryptoName = cryptoName.trim();
         if (!service.cryptoSupported(cryptoName)) {

@@ -73,11 +73,11 @@ public class JwtAuthenticationController {
     public ResponseEntity<JwtResponse> authenticate(
             @RequestBody @Valid JwtRequest authenticationRequest) {
 
+        UserDetails userDetails =
+                userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         jwtAuthenticationService.authenticate(
                 authenticationRequest.getEmail(), authenticationRequest.getPassword());
-        final UserDetails userDetails =
-                userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
