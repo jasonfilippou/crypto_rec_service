@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class DatabaseConnectionBatchImpl implements DatabaseConnection {
+public class DatabaseConnectionImpl implements DatabaseConnection {
 
     private static final int PRICES_BATCH_SIZE = 100;
     private static final int NAMES_BATCH_SIZE = 10;
