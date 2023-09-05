@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "e5179651-9ab5-4757-9b46-5aeb9b96e211",
+		"name": "Crypto Rec app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25468123"
+	},
+	"item": [
+		{
+			"name": "user-auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"jason.filippou@gmail.com\",\n    \"password\" : \"jasonfilippoupass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"jason.filippou@gmail.com\",\n    \"password\" : \"jasonfilippoupass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/authenticate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "api-calls",
+			"item": [
+				{
+					"name": "Aggregate Stats For All Cryptos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BEARER_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/aggregate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"aggregate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aggregate Stats For Specific Crypto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BEARER_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/aggregate/XRP",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"aggregate",
+								"XRP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sorted Cryptos By Normalized Price",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BEARER_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/sorted",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"sorted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Best Crypto Of The Day",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BEARER_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "date",
+									"value": "2022-01-08",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cryptorecapi/bestofday",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cryptorecapi",
+								"bestofday"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
