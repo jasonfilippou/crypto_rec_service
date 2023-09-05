@@ -1,7 +1,6 @@
 package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
-import com.xm.cryptorecservice.util.InMemoryAggregateStats;
 import com.xm.cryptorecservice.util.logger.Logged;
 
 import lombok.RequiredArgsConstructor;

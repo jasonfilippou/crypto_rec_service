@@ -3,7 +3,7 @@ package com.xm.cryptorecservice.service;
 
 import com.xm.cryptorecservice.persistence.CryptoPriceStatsMiner;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
-import com.xm.cryptorecservice.util.InMemoryAggregateStats;
+import com.xm.cryptorecservice.persistence.InMemoryAggregateStats;
 
 import com.xm.cryptorecservice.util.logger.Logged;
 import lombok.RequiredArgsConstructor;
