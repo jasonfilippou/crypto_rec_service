@@ -1,4 +1,4 @@
-package com.xm.cryptorecservice.model;
+package com.xm.cryptorecservice.model.crypto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +12,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CryptoPrice {
-    private  Timestamp timestamp;
-    private  BigDecimal price;
+    private Timestamp timestamp;
+    private BigDecimal price;
 
     public static CryptoPrice fromCSVRow(String[] csvRowParts) {
         return new CryptoPrice(

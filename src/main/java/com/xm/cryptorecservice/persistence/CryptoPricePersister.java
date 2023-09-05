@@ -1,8 +1,9 @@
 package com.xm.cryptorecservice.persistence;
 
 import com.xm.cryptorecservice.io.CryptoPriceFileReader;
-import com.xm.cryptorecservice.model.CryptoPrice;
+import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 
+import com.xm.cryptorecservice.util.logger.Logged;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
 
 @RequiredArgsConstructor
 @Slf4j
+@Logged
 public class CryptoPricePersister implements Runnable {
 
     private final DatabaseConnection dbConnection;

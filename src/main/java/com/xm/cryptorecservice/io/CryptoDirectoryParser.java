@@ -4,6 +4,7 @@ import com.xm.cryptorecservice.persistence.CryptoPricePersister;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
 
 import com.xm.cryptorecservice.util.AcceptedCryptoNames;
+import com.xm.cryptorecservice.util.logger.Logged;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Logged
 public class CryptoDirectoryParser {
 
     private static final int MAX_THREADS = 10;

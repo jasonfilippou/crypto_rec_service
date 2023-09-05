@@ -2,6 +2,7 @@ package com.xm.cryptorecservice;
 
 import com.xm.cryptorecservice.io.CryptoDirectoryParser;
 
+import com.xm.cryptorecservice.util.logger.Logged;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
+@Logged
 public class PreloadDatabase {
 
     private static final String DIR_PATH = "./task/prices";

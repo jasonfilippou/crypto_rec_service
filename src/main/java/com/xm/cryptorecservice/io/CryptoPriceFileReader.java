@@ -5,8 +5,9 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import com.xm.cryptorecservice.model.CryptoPrice;
+import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 
+import com.xm.cryptorecservice.util.logger.Logged;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Logged
 public class CryptoPriceFileReader {
 
     public List<CryptoPrice> readCSV(File csv) throws IOException {

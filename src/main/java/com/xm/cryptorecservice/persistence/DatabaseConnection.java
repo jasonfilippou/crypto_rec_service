@@ -1,6 +1,6 @@
 package com.xm.cryptorecservice.persistence;
 
-import com.xm.cryptorecservice.model.CryptoPrice;
+import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 
 import lombok.NonNull;
 
