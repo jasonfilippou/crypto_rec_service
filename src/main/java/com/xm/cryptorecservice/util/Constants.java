@@ -40,4 +40,9 @@ public final class Constants {
      */
     public static final DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern(GLOBAL_DATE_TIME_PATTERN);
+
+    /**
+     *  Maximum number of decimal digits we allow in a {@link java.math.BigDecimal} instance in our app.
+     */
+    public static final int BIG_DECIMAL_SCALE = 10;
 }

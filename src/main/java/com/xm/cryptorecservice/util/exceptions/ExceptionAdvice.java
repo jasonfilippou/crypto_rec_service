@@ -86,7 +86,10 @@ public class ExceptionAdvice {
      *     HttpStatus#NOT_FOUND} as the status code.
      */
     @ResponseBody
-    @ExceptionHandler({UsernameNotFoundException.class})
+    @ExceptionHandler({
+            UsernameNotFoundException.class,
+            DateOutOfStoredRangeException.class
+    })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ExceptionMessageContainer> notFoundStatusMessage(Exception exc) {
         return new ResponseEntity<>(

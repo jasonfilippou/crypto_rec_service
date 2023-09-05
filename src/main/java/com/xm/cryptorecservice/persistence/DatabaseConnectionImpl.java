@@ -4,10 +4,13 @@ import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
 import com.xm.cryptorecservice.util.logger.Logged;
 
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,7 +33,7 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void createCryptoPriceTable(@NonNull String tableName) {
+    public void createCryptoPriceTable(@NonNull @NotBlank String tableName) {
         String query =
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s (id BIGINT NOT NULL AUTO_INCREMENT, timestamp TIMESTAMP NOT"
@@ -62,7 +65,7 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
 
     @Override
     public void insertAllCryptoPrices(
-            @NonNull String tableName, @NonNull List<CryptoPrice> cryptoPrices) {
+            @NonNull @NotBlank String tableName, @NonNull List<CryptoPrice> cryptoPrices) {
         // Truncate
         String truncateQuery = String.format("TRUNCATE TABLE %s", tableName);
         jdbcTemplate.execute(truncateQuery);
@@ -80,7 +83,8 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     }
 
     @Override
-    public Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id) {
+    public Optional<CryptoPrice> getCryptoPriceById(
+            @NonNull @NotBlank String cryptoName, @NonNull Long id) {
         String query =
                 String.format(
                         "SELECT timestamp, trim(price)+0 FROM %s WHERE ID = ?",
@@ -98,7 +102,7 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
     }
 
     @Override
-    public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName) {
+    public Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull @NotBlank String cryptoName) {
         String selectQuery =
                 String.format(
                         """
@@ -106,7 +110,7 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
                 (select max(trim(price)+0) from %1$s) as 'maxprice',\s
                 (select trim(price)+0 from %1$s order by timestamp asc limit 1) as 'firstprice',\s
                 (select trim(price)+0 from %1$s order by timestamp desc limit 1) as 'lastprice'""",
-                        cryptoName);
+                        cryptoName.toUpperCase(Locale.ROOT));
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
@@ -114,6 +118,22 @@ public class DatabaseConnectionImpl implements DatabaseConnection {
         } catch (EmptyResultDataAccessException exc) {
             log.warn("Empty result encountered when getting stats from table {}", cryptoName);
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<CryptoPrice> getCryptoPricesForDate(
+            @NonNull @NotBlank String cryptoName, @NonNull @NotBlank String date) {
+        String selectQuery =
+                String.format(
+                        "SELECT timestamp as timestamp, trim(price)+0 as price " +
+                        "from %s where DATE_FORMAT(timestamp, '%%Y-%%m-%%d') = '%s'", // MySQL format is %Y-%m-%d
+                        cryptoName, date);
+        try {
+            return jdbcTemplate.query(selectQuery, new BeanPropertyRowMapper<>(CryptoPrice.class));
+        } catch(DataAccessException dataAccessException){
+            log.warn("Received exception: {}", dataAccessException.getMessage());
+            throw new RuntimeException(dataAccessException.getMessage());
         }
     }
 }

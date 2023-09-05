@@ -5,6 +5,7 @@ import static com.xm.cryptorecservice.util.SortOrder.DESC;
 
 import com.xm.cryptorecservice.service.CryptoRecService;
 import com.xm.cryptorecservice.util.exceptions.BadDateFormatException;
+import com.xm.cryptorecservice.util.exceptions.DateOutOfStoredRangeException;
 import com.xm.cryptorecservice.util.exceptions.UnsupportedCryptoException;
 import com.xm.cryptorecservice.util.logger.Logged;
 
@@ -22,8 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cryptorecapi")
@@ -104,22 +107,31 @@ public class CryptoRecController {
                             content = @Content),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Day out of stored range or bad day format provided.",
+                            description = "Date format not in YYYY-mm-dd",
                             content = @Content),
                     @ApiResponse(
                             responseCode = "401",
                             description = "Unauthenticated user",
-                            content = @Content)
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Date provided out of stored range.",
+                            content = @Content),
             })
     @GetMapping("/bestofday")
-    public ResponseEntity<?> bestCryptoOfTheDay(@RequestParam(name = "day") @NotBlank String day) throws BadDateFormatException {
-        day = day.strip();
+    public ResponseEntity<?> bestCryptoOfTheDay(@RequestParam(name = "date") @NotBlank String date)
+            throws BadDateFormatException, DateOutOfStoredRangeException {
+        date = date.strip();
         // Check to see if the user supplied the date in the required format.
         try {
-            LocalDate.parse(day, DATE_FORMATTER); // Call for side-effect
+            LocalDate.parse(date, DATE_FORMATTER); // Call for side-effect
         } catch (DateTimeParseException exception){
-            throw new BadDateFormatException("Date " + day + " not in YYYY-mm-dd format.");
+            throw new BadDateFormatException("Date " + date + " not in YYYY-mm-dd format.");
         }
-        return ResponseEntity.ok("Hooray! Your date can be parsed!");
+        Map.Entry<String, BigDecimal> bestCryptoOfDay = service.getBestCryptoForDate(date);
+        if(bestCryptoOfDay == null){ // Signifies that we couldn't find data for *any* crypto for that date.
+            throw new DateOutOfStoredRangeException(date);
+        }
+        return ResponseEntity.ok(bestCryptoOfDay);
     }
 }

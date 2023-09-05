@@ -3,6 +3,7 @@ package com.xm.cryptorecservice.persistence;
 import static com.xm.cryptorecservice.util.SortOrder.ASC;
 
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Maps;
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
 import com.xm.cryptorecservice.util.SortOrder;
 import com.xm.cryptorecservice.util.logger.Logged;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @Logged
 public class InMemoryAggregateStats {
 
-    private final Map<String, CryptoPriceStats> cryptoPriceStats = new ConcurrentHashMap<>();
+    private final Map<String, CryptoPriceStats> cryptoPriceStats = Maps.newConcurrentMap();
 
     public void add(String crypto, CryptoPriceStats stats) {
         cryptoPriceStats.put(crypto, stats);
@@ -64,5 +65,9 @@ public class InMemoryAggregateStats {
                 sortOrder == ASC
                         ? Comparator.comparing(intermediateMap::get)
                         : Comparator.comparing(intermediateMap::get).reversed());
+    }
+    
+    public Set<String> getSupportedCryptos(){
+        return cryptoPriceStats.keySet();
     }
 }

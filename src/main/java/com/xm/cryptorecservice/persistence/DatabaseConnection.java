@@ -19,4 +19,6 @@ public interface DatabaseConnection {
     Optional<CryptoPrice> getCryptoPriceById(@NonNull String cryptoName, @NonNull Long id);
 
     Optional<CryptoPriceStats> getCryptoPriceStats(@NonNull String cryptoName);
+
+    List<CryptoPrice> getCryptoPricesForDate(String cryptoName, String date);
 }

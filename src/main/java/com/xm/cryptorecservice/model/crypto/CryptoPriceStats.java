@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
+import static com.xm.cryptorecservice.util.Constants.BIG_DECIMAL_SCALE;
 @Data
 @NoArgsConstructor
 public class CryptoPriceStats {
@@ -30,7 +30,7 @@ public class CryptoPriceStats {
 
     public BigDecimal getNormalizedPrice() {
         if (normalizedPrice == null) {
-            normalizedPrice = getPriceRange().divide(minPrice, RoundingMode.HALF_EVEN);
+            normalizedPrice = getPriceRange().divide(minPrice, BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN);
         }
         return normalizedPrice;
     }
