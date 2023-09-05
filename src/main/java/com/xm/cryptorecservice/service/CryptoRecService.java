@@ -3,12 +3,14 @@ package com.xm.cryptorecservice.service;
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
 import com.xm.cryptorecservice.persistence.DatabaseConnection;
 import com.xm.cryptorecservice.persistence.InMemoryAggregateStats;
+import com.xm.cryptorecservice.util.SortOrder;
 import com.xm.cryptorecservice.util.logger.Logged;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
@@ -29,5 +31,9 @@ public class CryptoRecService {
 
     public CryptoPriceStats getAggregateStatsOfCrypto(String cryptoName) {
         return inMemoryDb.get(cryptoName);
+    }
+
+    public Map<String, BigDecimal> getCryptosSortedByNormalizedPrice(SortOrder sortOrder){
+        return inMemoryDb.cryptosSortedByNormalizedPriceDescending(sortOrder);
     }
 }

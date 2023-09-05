@@ -11,16 +11,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.xm.cryptorecservice.util.SortOrder.DESC;
 
 @RestController
 @RequestMapping("/cryptorecapi")
 @RequiredArgsConstructor
 @Logged
-@Slf4j
 @Tag(name = "2. Crypto Recommendations API")
 public class CryptoRecController {
 
@@ -67,5 +67,22 @@ public class CryptoRecController {
             throw new UnsupportedCryptoException(cryptoName);
         }
         return ResponseEntity.ok(service.getAggregateStatsOfCrypto(cryptoName));
+    }
+
+    @Operation(summary = "Return cryptos sorted by normalized aggregate price in descending order")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Sorted cryptos returned",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthenticated user",
+                            content = @Content)
+                    })
+    @GetMapping("/sorted")
+    public ResponseEntity<?> getCryptosSortedByNormalizedPrice(){
+        return ResponseEntity.ok(service.getCryptosSortedByNormalizedPrice(DESC));
     }
 }
