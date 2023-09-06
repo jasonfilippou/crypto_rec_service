@@ -34,7 +34,6 @@ public class ExceptionAdvice {
         MethodArgumentTypeMismatchException.class,
         ConstraintViolationException.class,
         BadDateFormatException.class,
-        UnsupportedCryptoException.class,
         HibernateException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -88,7 +87,8 @@ public class ExceptionAdvice {
     @ResponseBody
     @ExceptionHandler({
             UsernameNotFoundException.class,
-            DateOutOfStoredRangeException.class
+            DateOutOfStoredRangeException.class,
+            UnsupportedCryptoException.class,
     })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ExceptionMessageContainer> notFoundStatusMessage(Exception exc) {

@@ -64,12 +64,16 @@ public class CryptoRecController {
                         content = @Content),
                 @ApiResponse(
                         responseCode = "400",
-                        description = "Unsupported cryptocurrency or blank name provided",
+                        description = "Blank name provided",
                         content = @Content),
                 @ApiResponse(
                         responseCode = "401",
                         description = "Unauthenticated user",
                         content = @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Unsupported cryptocurrency.",
+                            content = @Content)
             })
     @GetMapping("/aggregate/{cryptoName}")
     public ResponseEntity<?> getAggregateStats(@PathVariable @NotBlank String cryptoName)
