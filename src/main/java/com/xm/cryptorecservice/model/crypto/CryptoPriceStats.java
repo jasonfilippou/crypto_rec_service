@@ -6,6 +6,15 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import static com.xm.cryptorecservice.util.Constants.BIG_DECIMAL_SCALE;
+
+/**
+ * A class that holds aggregate stats of a particular crypto in memory. The name of the crypto is not supplied, because
+ * it is encoded in the database table from which the data was pulled.
+ *
+ * @see CryptoPrice
+ *
+ * @author jason
+ */
 @Data
 @NoArgsConstructor
 public class CryptoPriceStats {

@@ -14,6 +14,12 @@ import java.util.concurrent.CountDownLatch;
 
 import static com.xm.cryptorecservice.util.Constants.BIG_DECIMAL_SCALE;
 
+/**
+ * Queries the {@link DatabaseConnection} object provided at construction for the prices of the provided cryptocurrency
+ * for the provided day, and stores the normalized price in the provided {@link ConcurrentMap} instance.
+ *
+ * @author jason
+ */
 @Logged
 @RequiredArgsConstructor
 public class CryptoPricesForDateMiner implements Runnable {

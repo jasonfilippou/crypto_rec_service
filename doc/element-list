@@ -1,0 +1,14 @@
+com.xm.cryptorecservice
+com.xm.cryptorecservice.config
+com.xm.cryptorecservice.controller
+com.xm.cryptorecservice.io
+com.xm.cryptorecservice.model.crypto
+com.xm.cryptorecservice.model.jwt
+com.xm.cryptorecservice.model.user
+com.xm.cryptorecservice.persistence
+com.xm.cryptorecservice.service
+com.xm.cryptorecservice.service.jwt
+com.xm.cryptorecservice.util
+com.xm.cryptorecservice.util.exceptions
+com.xm.cryptorecservice.util.jwt
+com.xm.cryptorecservice.util.logger

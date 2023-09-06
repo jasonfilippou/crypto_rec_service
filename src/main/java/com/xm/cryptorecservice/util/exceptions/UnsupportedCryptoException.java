@@ -3,7 +3,7 @@ package com.xm.cryptorecservice.util.exceptions;
 import lombok.Getter;
 
 /**
- * @ {@link RuntimeException} thrown whenever the user supplies a crypto with a name that we do not
+ * A {@link RuntimeException} thrown whenever the user supplies a crypto with a name that we do not
  * (yet) support.
  */
 @Getter

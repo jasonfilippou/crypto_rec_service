@@ -12,6 +12,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * A {@link Runnable} which:
+ * <ol>
+ *  <li>Uses the {@link DatabaseConnection} object provided at construction to create the table corresponding to the {@link File} parameter object's name.</li>
+ *  <li>Uses the provided {@link CryptoPriceFileReader} to read the file in memory.</li>
+ *  <li>Uses the {@link DatabaseConnection} object to persist the file rows on the DB table just created.</li>
+ *</ol>
+ *  Once finished, it counts down the provided {@link CountDownLatch} instance.
+ *
+ * @author jason
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Logged

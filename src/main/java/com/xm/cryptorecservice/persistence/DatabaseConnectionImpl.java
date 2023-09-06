@@ -21,6 +21,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * An implementation of {@link DatabaseConnection} that performs batch inserts for
+ * {@link DatabaseConnection#insertAllCryptoPrices(String, List)}.
+ *
+ * @author jason
+ */
 @Repository
 @RequiredArgsConstructor
 @Logged

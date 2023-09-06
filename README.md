@@ -461,6 +461,7 @@ We achieve dependency injection transparently, without any `@Autowired` annotati
 `private` and `final` in the target class and using Lombok's `@RequiredArgsConstructor` annotation. Of course, `@Component`,
 `@RestController`, `@Service` and `@Repository` annotations are used as required.
 
+IntelliJ Ultimate edition was used, employing the `google-java-format` plugin for formatting.
 ## Known Issues
 
 - In the `/cryptorecapi/aggregate/{crypto}` endpoint, if you neglect to pass in the

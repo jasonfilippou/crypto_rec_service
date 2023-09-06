@@ -8,6 +8,14 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+/**
+ * A simple POJO to represent the price of a particular crypto at a certain timestamp. The name of the crypto is not
+ * required, because it is already encoded in the name of the database table.
+ *
+ * @see CryptoPriceStats
+ *
+ * @author jason
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
