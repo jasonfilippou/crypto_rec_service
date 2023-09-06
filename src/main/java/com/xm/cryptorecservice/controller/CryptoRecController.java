@@ -28,6 +28,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 
+/**
+ * A {@link RestController} responsible for serving up endpoints, receiving and sending data to the user.
+ * 
+ * @author jason 
+ */
 @RestController
 @RequestMapping("/cryptorecapi")
 @RequiredArgsConstructor
@@ -38,6 +43,15 @@ public class CryptoRecController {
 
     private final CryptoRecService service;
 
+    /**
+     * Return the aggregate stats for all loaded cryptos. Those include minimum price, maximum price, first price, last price,
+     * price range (max - min), price difference (last - first) and normalized price ( (max - min) / min).
+     * 
+     * @return A {@link ResponseEntity} containing a JSON payload with crypto names as keys, and the aforementioned stats
+     * as values. The response payload is sorted lexicographically by keys, in ascending order.
+     * 
+     * @see #getAggregateStats(String) 
+     */
     @Operation(summary = "Return aggregate stats for all cryptos")
     @ApiResponses(
             value = {
@@ -55,6 +69,15 @@ public class CryptoRecController {
         return ResponseEntity.ok(service.getAggregateStats());
     }
 
+    /**
+     * Get aggregate stats for a specific crypto. Those include minimum price, maximum price, first price, last price,
+     * price range (max - min), price difference (last - first) and normalized price ((max - min) / min).
+     * @param cryptoName The crypto to return aggregate stats for.
+     * @return A {@link ResponseEntity} with a single entry consisting of the provided crypto as the key and the aforementioned 
+     * stats as the value.
+     * @throws UnsupportedCryptoException if the user provides an unsupported cryptocurrency.
+     * @see #getAggregateStats() 
+     */
     @Operation(summary = "Return aggregate stats for a specific crypto")
     @ApiResponses(
             value = {
@@ -70,10 +93,10 @@ public class CryptoRecController {
                         responseCode = "401",
                         description = "Unauthenticated user",
                         content = @Content),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Unsupported cryptocurrency.",
-                            content = @Content)
+                @ApiResponse(
+                        responseCode = "404",
+                        description = "Unsupported cryptocurrency.",
+                        content = @Content)
             })
     @GetMapping("/aggregate/{cryptoName}")
     public ResponseEntity<?> getAggregateStats(@PathVariable @NotBlank String cryptoName)
@@ -85,6 +108,11 @@ public class CryptoRecController {
         return ResponseEntity.ok(service.getAggregateStatsOfCrypto(cryptoName));
     }
 
+    /**
+     * Return the cryptos sorted by normalized aggregate price, in descending order.
+     * @return A {@link ResponseEntity} containing the cryptos as keys and their normalized aggregate price as values,
+     * where the entries are sorted in descending order by the values.
+     */
     @Operation(summary = "Return cryptos sorted by normalized aggregate price in descending order")
     @ApiResponses(
             value = {
@@ -102,6 +130,14 @@ public class CryptoRecController {
         return ResponseEntity.ok(service.getCryptosSortedByNormalizedPrice(DESC));
     }
 
+    /**
+     * Returns the crypto with the highest normalized price for the given day.
+     * @param date A date string, which MUST be in YYYY-mm-dd format.
+     * @return A single entry consisting of the crypto with the highest normalized price for the given day as the key,
+     * and that normalized price as the value.
+     * @throws BadDateFormatException If the date string provided is NOT in YYYY-mm-dd format.
+     * @throws DateOutOfStoredRangeException If the date provided does not have data for ANY supported cryptocurrency.
+     */
     @Operation(summary = "Return the crypto with the highest normalized price for the given day. Day MUST be in YYYY-mm-dd format.")
     @ApiResponses(
             value = {

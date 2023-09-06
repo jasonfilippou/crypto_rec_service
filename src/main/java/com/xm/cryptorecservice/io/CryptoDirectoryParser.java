@@ -19,6 +19,9 @@ import java.util.concurrent.Executors;
 
 import static com.xm.cryptorecservice.util.Constants.MAX_THREADS;
 
+/**
+ * A utility class
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
