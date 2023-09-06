@@ -34,15 +34,15 @@
 ### Database 
 
 The code has been developed and tested on a Linux Mint 20.2 Uma machine with kernel version `5.15.0-79-generic` and Java 17.
-We employ a MySQL database for persistence (version `8.0.34-0ubuntu0.20.04.1` for Linux x86_64). The `application.properties` file of the 
-application lets it create all the entities on the database, so minimal database legwork should be required.
+We employ a MySQL database for persistence (version `8.0.34-0ubuntu0.20.04.1` for Linux x86_64). The code creates and populates all
+tables, so minimal database legwork is required.
 You just need to create the database `xm_crypto_db`, a user named `xmcryptouser` with the provided password
 and grant all privileges on `xm_crypto_db` to `xmcryptouser`. This is how we did it in our Linux machine (Windows users won't need this). Open up a shell and type:
 
 ```shell
 sudo mysql --password 
 ```
-Input your `sudo` password, and this should open up the `mysql` prompt, where you should type:
+Input your `sudo` password, and this should open up the `mysql` prompt, where you should type (Windows users _will_ need this as well):
 ```mysql
 create database xm_crypto_db; -- Creates the new database
 create user 'xmcryptouser'@'%' identified by 'ThePassword882100##'; -- Same password we have in the application.properties
@@ -60,16 +60,16 @@ grant select, insert, delete, update on xm_crypto_db.* to 'xmcryptouser'@'%';
 
 ### Interacting with the API
 
-You can use plain `curl` calls, a tool like POSTMAN or even OpenAPI 3. 
+You can use plain `curl` calls, a tool like POSTMAN or even OpenAPI 3.0 
 Some details for Postman and OpenAPI follow.
 
 #### Postman 
 
-We provide a POSTMAN collection in the file `Crypto Rec app.postman_collection.json`. This file
+We provide a POSTMAN collection in the file `Crypto_Rec_App.postman_collection.json`. This file
 has example calls that you can use to interact with the API. Every call to the
 crypto API has the `Authorization` header assigned to the string `Bearer {{BEARER_TOKEN}}`, where
 `{{BEARER_TOKEN}}` is a POSTMAN environment variable that contains the JWT
-returned by the authentication endpoint (see below, section "Registration & Authentication"). Here is how
+returned by the authentication endpoint (see below, section [User Registration & Authentication](#user-registration--authentication)). Here is how
 you can set this variable. First, click on the <span style="color:lightgreen">Environment Quick Look" icon on the
 upper-right corner</span>, then on <span style="color:red">"Edit"</span>:
 
@@ -89,8 +89,8 @@ fashion. Once the app is running, access the page by sending your browser to
 http://localhost:8080/swagger-ui/index.html#.
 
 To authenticate using the OpenAPI page, make the same `POST` call described above
-to the `cyptorecapi/authenticate` endpoint (make sure the user has been registered first!), copy the JWT returned 
-and then click on the <span style="color:red">"Authorize" button<span style="color:red">:
+to the `cryptorecapi/authenticate` endpoint (make sure the user has been registered first!), copy the JWT returned 
+and then click on the <span style="color:red">Authorize button<span style="color:red">:
 
 ![Asking for JWT through OpenApi3.0](img/gettingJwtTokenFromOpenApi.png)
 
@@ -110,7 +110,7 @@ re-authenticate if you refresh the page.
 The API generates JWTs for authentication, with the secret stored in `application.properties`. The provided POSTMAN collection
 shows some examples of user registration, but you can also use the OpenAPI page 
 if you prefer. For example, `POST`-ing the following payload
-to the `cardsapi/register` endpoint registers Jason Filippou:
+to the `cryptorecapi/register` endpoint registers Jason Filippou:
 
 ```json
 {
@@ -119,8 +119,14 @@ to the `cardsapi/register` endpoint registers Jason Filippou:
 }
 ```
 
-Attempting to register a user twice will result in a `409 CONFLICT` Http Error Code
-sent back. 
+Users are uniquely identified by their e-mail address; attempting to register the same e-mail 
+twice will result in a `409 CONFLICT` Http Error Code sent back, alongside a descriptive message:
+
+```json
+{
+    "message": "Username jason.filippou@gmail.com already in database."
+}
+```
 
 After registering, you should receive a JSON with just your username (password ommitted for security) and a `201 CREATED` Http Response code:
 
@@ -129,7 +135,18 @@ After registering, you should receive a JSON with just your username (password o
   "username": <THE_USERNAME_YOU_CHOSE>
 }
 ```
-Note that, in the database, passwords are encrypted using the BCrypt algorithm.
+Note that, in the database, passwords are encrypted using the BCrypt algorithm, so
+the app admins cannot see the user's password in cleartext:
+
+```mysql
+mysql> select * from user where email_address='jason.filippou@gmail.com';
++----+--------------------------+--------------------------------------------------------------+
+| id | email_address            | password                                                     |
++----+--------------------------+--------------------------------------------------------------+
+|  1 | jason.filippou@gmail.com | $2a$10$TJ3qVcmo7UsUW/16dKchHe2YCVLN.whT4KBmMAdaMq9JhhIOIsdRK |
++----+--------------------------+--------------------------------------------------------------+
+1 row in set (0.00 sec)
+```
 
 To receive the Bearer Token, `POST` the same payload
 to the `/cryptorecapi/authenticate` endpoint, for example:
@@ -162,12 +179,12 @@ threads (a maximum of `10`, but you can tune this in the `Constants` class) to s
 ### Calculating aggregate price stats (min, max, first, last, difference, range)
 
 To make most of the endpoints super - efficient, the aggregate stats for the entire month
-are loaded in an in-memory "database" (a thread-safe `Map`) right after the MySQL
+are eagerly loaded in an in-memory "database" (a thread-safe `Map`) right after the MySQL
 persistence has taken place. This also employs multiple threads to speed up the process.
 
-The entire process of database persistence and in-memory stats aggregation begins in the `CommandLineRunner`
+The database persistence and in-memory stats aggregation begins in the `CommandLineRunner`
 bean in `PreloadDatabase.java`, so you can start reading from there. By splitting the work across
-multiple workers, in our machine and with the original 5 CSVs, the entire process takes about 2.5 seconds.
+multiple workers, in our machine and with the original 5 CSVs, the entire process takes about 2.2 seconds.
 
 ### Descending sorted list of cryptos
 
@@ -185,7 +202,7 @@ list of `<crypto, normalized_price>` pairs sorted in descending order of normali
 }
 ```
 
-It appears that over the month of January 2022, Ethereum offered the best normalized price. We offer
+It appears that over the month of January 2022, for which we have data, Ethereum offered the best normalized price. We offer
 10 decimal digits of numerical accuracy both in the application and in the database.
 
 ### Aggregate stats for a given crypto and all cryptos
@@ -276,7 +293,14 @@ For this requirement, we go back to the on-disk database since maintaining stats
 day in memory would be prohibitively expensive. We once again employ a fixed thread pool with a
 maximum number of 10 threads to speed up the computation across all cryptos.
 
-<strong>We require that days are provided in a YYYY-mm-dd format, e.g "2022-01-01".</strong>
+<strong>We require that days are provided in a YYYY-mm-dd format, e.g "2022-01-01".</strong> If the user does not provide
+the date in this format, we return a `400 BAD REQUEST` HTTP Error code and a descriptive text:
+
+```json
+{
+    "message": "Date 01/02/2022 not in YYYY-mm-dd format."
+}
+```
 
 It appears that for 2022-01-01 (the first day for which the original files give us data), the 
 "best scoring" crypto was `XRP`:
@@ -320,13 +344,12 @@ to the [Documentation](#documentation) section of this writeup for a summary.
 
 ### Scaling across multiple cryptos
 
-The application scales well in the face of several cryptos, because we employ multiple threads
-both to load the data in our MySQL database and in-memory, and to address the requirements of the 
-"best crypto of the day" query. 
+The application scales well in the face of several cryptos, because we employ multiple threads to preload the database, and to address the requirements of the
+"best crypto of the day" endpoint. 
 
 ### Safe-guarding against not currently supported cryptos
 
-The application is robust against not currently supported cryptos as well. At 
+The application is robust against not currently supported cryptos. At 
 startup, it determines the set of acceptable cryptos via the CSV files present in the `./task/prices` directory.
 Then, as described [above](#aggregate-stats-for-a-given-crypto-and-all-cryptos), the application will serve the 
 user with a `404` if they attempt to return results for an unsupported crypto.
@@ -408,12 +431,12 @@ being generated under the `/doc` directory.
 The version of Java used is 17 and that of Spring Boot is 3.1.3. We pull several interesting dependencies in our `pom.xml`,
 such as:
 
-- OpenCSV library for parsing CSVs
-- Guava for synchronized maps
-- Hibernate validators
-- Lombok
-- Spring Boot Data JPA starter
-- Spring Boot Security starter
+- [OpenCSV library](https://opencsv.sourceforge.net/) for CSV parsing
+- [Guava](https://github.com/google/guava) mainly for synchronized maps
+- [Hibernate validators](https://hibernate.org/validator/#:~:text=Hibernate%20Validator%20allows%20to%20express,server%20and%20client%20application%20programming.) to validate path variables and request parameters
+- [Lombok](https://projectlombok.org/) to avoid boiler-plate code.
+- [Spring Boot Starter Data JPA](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
+- [Spring Boot Starter Security](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security)
 
 and several others. To interact with the database, we use both the JPA Repository pattern
 and interacting directly with a `JdbcTemplate` instance. The JPA Repository pattern is used only for 
@@ -431,11 +454,19 @@ The method `CryptoRecService::getBestCryptoOfDate()` is the most interesting one
 since it could employ one of two different synchronized `Map` implementations to achieve its goals. Feel free to have a look at the comments
 inside the method for details.
 
+The data type we employ for cryptocurrency prices is `BigDecimal`, and we offer 10 decimal digits of numerical
+accuracy both at the database level and in-memory.
+
+We achieve dependency injection transparently, without any `@Autowired` annotations, by making dependencies
+`private` and `final` in the target class and using Lombok's `@RequiredArgsConstructor` annotation. Of course, `@Component`,
+`@RestController`, `@Service` and `@Repository` annotations are used as required.
+
 ## Known Issues
 
 - In the `/cryptorecapi/aggregate/{crypto}` endpoint, if you neglect to pass in the
   path variable `{crypto}` you will get a `401 Unauthorized` HTTP Error. This is because of the way that the `commence()` method has been overloaded in
-  `JwtAuthenticationEntryPoint` and could probably have been handled better.
+  `JwtAuthenticationEntryPoint` and could probably have been handled better. This error is not reproducible in Swagger,
+since Swagger does some elementary field cleansing of its own and does not allow you to put in nothing for `{crypto}`.
 - We use the Hibernate `@Email` validator for validating e-mails, and that validator is sensitive to leading / trailing whitespace. Please
   be careful when typing e-mail addresses in authentication endpoints.
 - As mentioned [above](#scaling-across-greater-time-range-of-price-data), it is possible that, for a very large CSV file,
