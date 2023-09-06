@@ -20,7 +20,10 @@ import java.util.concurrent.Executors;
 import static com.xm.cryptorecservice.util.Constants.MAX_THREADS;
 
 /**
- * A utility class
+ * A utility class responsible for parsing a given directory of CSV files with crypto prices. Creates one database table
+ * per CSV file. Spawns multiple worker threads to parallelize this process.
+ *
+ * @author jason
  */
 @Slf4j
 @Service
@@ -31,6 +34,13 @@ public class CryptoDirectoryParser {
     private final DatabaseConnection db;
     private final CryptoPriceFileReader csvReader;
 
+    /**
+     * Persist all the CSVs in the directory in the database, persisting one table per each CSV,
+     * and creates another table with all the names of supported cryptos. Employs multiple threads to speed up the process.
+     *
+     * @param directory An absolute or relative path towards the directory that contains the .csv files.
+     * @return A list of crypto names, corresponding to the names of the .csv files that were parsed.
+     */
     public List<String> persistAllCSVsInDirectory(String directory) {
         List<File> csvs =
                 Arrays.stream(Objects.requireNonNull(new File(directory).listFiles()))
