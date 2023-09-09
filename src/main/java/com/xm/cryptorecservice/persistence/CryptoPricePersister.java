@@ -35,19 +35,23 @@ public class CryptoPricePersister implements Runnable {
 
     @Override
     public void run() {
-        String cryptoName =
-                csv.getName()
-                        .substring(0, csv.getName().length() - 4); // Assuming format "name.csv"
-        createTable(cryptoName);
-        List<CryptoPrice> cryptoPrices = null;
         try {
-            cryptoPrices = csvReader.readCSV(csv);
-        } catch (IOException e) {
-            log.warn("Exception received: " + e.getMessage());
-            throw new RuntimeException(e);
+            String cryptoName =
+                    csv.getName()
+                            .substring(0, csv.getName().length() - 4); // Assuming format "name.csv"
+            createTable(cryptoName);
+            List<CryptoPrice> cryptoPrices = null;
+            try {
+                cryptoPrices = csvReader.readCSV(csv);
+            } catch (IOException e) {
+                log.warn("Exception received: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+            persistCryptoPrices(cryptoPrices, cryptoName);
+        } finally {
+            latch.countDown();
         }
-        persistCryptoPrices(cryptoPrices, cryptoName);
-        latch.countDown();
+
     }
 
     private void createTable(String tableName) {

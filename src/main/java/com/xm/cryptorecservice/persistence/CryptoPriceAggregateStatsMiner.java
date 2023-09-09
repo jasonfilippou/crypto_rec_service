@@ -26,8 +26,11 @@ public class CryptoPriceAggregateStatsMiner implements Runnable {
 
     @Override
     public void run() {
-        Optional<CryptoPriceStats> priceStats = dbConnection.getCryptoPriceStats(cryptoName);
-        priceStats.ifPresent(cryptoPriceStats -> inMemoryDb.add(cryptoName, cryptoPriceStats));
-        latch.countDown();
+        try {
+            Optional<CryptoPriceStats> priceStats = dbConnection.getCryptoPriceStats(cryptoName);
+            priceStats.ifPresent(cryptoPriceStats -> inMemoryDb.add(cryptoName, cryptoPriceStats));
+        } finally {
+            latch.countDown();
+        }
     }
 }

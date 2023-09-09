@@ -30,6 +30,13 @@ public class CryptoPriceStats {
     private BigDecimal priceDifference;
     private BigDecimal normalizedPrice;
 
+    public CryptoPriceStats(BigDecimal minPrice, BigDecimal maxPrice,
+                            BigDecimal firstPrice, BigDecimal lastPrice){
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.firstPrice = firstPrice;
+        this.lastPrice = lastPrice;
+    }
     public BigDecimal getPriceRange() {
         if (priceRange == null) {
             priceRange = maxPrice.subtract(minPrice);

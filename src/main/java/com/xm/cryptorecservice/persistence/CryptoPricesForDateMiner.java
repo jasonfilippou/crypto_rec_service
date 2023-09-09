@@ -31,11 +31,14 @@ public class CryptoPricesForDateMiner implements Runnable {
     private final CountDownLatch latch;
     @Override
     public void run() {
-        List<CryptoPrice> pricesOfCryptoForDate = dbConnection.getCryptoPricesForDate(cryptoName, date);
-        if(!pricesOfCryptoForDate.isEmpty()){
-            map.put(cryptoName, getNormalizedPrice(pricesOfCryptoForDate));
+        try {
+            List<CryptoPrice> pricesOfCryptoForDate = dbConnection.getCryptoPricesForDate(cryptoName, date);
+            if(!pricesOfCryptoForDate.isEmpty()){
+                map.put(cryptoName, getNormalizedPrice(pricesOfCryptoForDate));
+            }
+        } finally {
+            latch.countDown();
         }
-        latch.countDown();
     }
 
     private BigDecimal getNormalizedPrice(@NotEmpty List<CryptoPrice> cryptoPrices){
