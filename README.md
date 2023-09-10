@@ -400,16 +400,14 @@ We employ basic AOP features to offer logging on-demand for any class' methods. 
 into a method, exit from a method as well as exception throwing from a method.
 
 Have a look at the package `com.xm.cryptorecservice.util.logger` for more.
+
 ## Testing
 
-As of the 6th of September, we did not have the necessary time to implement unit and integration tests.
-We wanted to provide a version of the app that we have found manually to be working early, so as to speed up the code 
-review process. Time permitting, until the time of the code review, tests will be added and this README section will be edited.
+We include unit tests under the `test/` subdirectory. The IntelliJ code coverage tool
+shows about 61% line coverage overall:
 
-For examples of how we write unit and integration tests, please take a look at [this](https://github.com/jasonfilippou/agile-bank)
-and [this](https://github.com/jasonfilippou/cards-spring-app) repo, which contain coding exercises in Spring performed
-for some other companies in the past. We employ [Mockito](https://site.mockito.org/) for mocked testing. For integration testing,
-we employ an H2 database and load the entire Spring context.
+![Code coverage from IntelliJ](img/codeCoverageMetrics.png)
+
 
 ## Exception handling
 
