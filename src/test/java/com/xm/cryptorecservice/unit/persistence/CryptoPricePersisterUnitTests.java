@@ -1,5 +1,10 @@
 package com.xm.cryptorecservice.unit.persistence;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 import com.xm.cryptorecservice.io.CryptoPriceFileReader;
 import com.xm.cryptorecservice.model.crypto.CryptoPrice;
 import com.xm.cryptorecservice.persistence.CryptoPricePersister;
@@ -19,13 +24,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 @RunWith(MockitoJUnitRunner.class)
-public class CryptoPricePersisterTests {
+public class CryptoPricePersisterUnitTests {
     
     @InjectMocks
     private CryptoPricePersister persister;
@@ -45,13 +45,13 @@ public class CryptoPricePersisterTests {
     public void setUp(){
         csv = new File("./task/prices/ETH.csv");
         latch = new CountDownLatch(1);
-        doNothing().when(dbConn).createTableOfCryptoNames(anyList());
-        doNothing().when(dbConn).insertAllCryptoPrices(anyString(), anyList());
         persister = new CryptoPricePersister(dbConn, csv, fileReader, latch);
     }
     @Test
     public void whenReaderCompletesSuccessfully_thenLatchIsCountedDown(){
         try {
+            doNothing().when(dbConn).createCryptoPriceTable(anyString());
+            doNothing().when(dbConn).insertAllCryptoPrices(anyString(), anyList());
             when(fileReader.readCSV(csv)).thenReturn(List.of(
                     new CryptoPrice(Timestamp.valueOf("2021-09-12 00:10:20"), new BigDecimal("201.0")),
                     new CryptoPrice(Timestamp.valueOf("2021-09-12 00:10:21"), new BigDecimal("201.1"))
@@ -66,6 +66,7 @@ public class CryptoPricePersisterTests {
     @Test(expected = RuntimeException.class) // Exceptions is changed inside run().
     public void whenReaderThrowsIOException_thenLatchIsStillCountedDown() throws IOException {
         try {
+            doNothing().when(dbConn).createCryptoPriceTable(anyString());
             doThrow(new IOException("IO Error")).when(fileReader).readCSV(csv);
             persister.run();
         } finally {

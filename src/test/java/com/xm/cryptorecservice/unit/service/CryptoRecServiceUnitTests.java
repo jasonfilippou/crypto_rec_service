@@ -2,8 +2,7 @@ package com.xm.cryptorecservice.unit.service;
 
 import static com.xm.cryptorecservice.unit.TestUtils.collectionIsSortedByFieldInGivenDirection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 import com.xm.cryptorecservice.model.crypto.CryptoPriceStats;
@@ -23,7 +22,7 @@ import java.util.Map;
 import java.util.SortedMap;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CryptoRecServiceTests {
+public class CryptoRecServiceUnitTests {
 
     @InjectMocks
     private CryptoRecService cryptoRecService;
@@ -55,7 +54,7 @@ public class CryptoRecServiceTests {
     public void whenInMemoryDBTellsUsTheCryptoIsNotSupported_thenSoDoWe(){
         String crypto = "ETH";
         when(inMemoryDb.containsCrypto(crypto)).thenReturn(false);
-        assertTrue(cryptoRecService.cryptoSupported(crypto));
+        assertFalse(cryptoRecService.cryptoSupported(crypto));
     }
 
     @Test

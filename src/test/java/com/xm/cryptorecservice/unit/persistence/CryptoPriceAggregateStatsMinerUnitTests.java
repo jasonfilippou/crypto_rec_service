@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CryptoPriceAggregateStatsMinerTests {
+public class CryptoPriceAggregateStatsMinerUnitTests {
 
     @InjectMocks private CryptoPriceAggregateStatsMiner miner;
 

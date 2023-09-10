@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CryptoPricesForDateMinerTests {
+public class CryptoPricesForDateMinerUnitTests {
     
     @Mock
     private DatabaseConnection dbConnection;
